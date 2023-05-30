@@ -13,7 +13,8 @@ html{
 }
 
 body{
-    background-image:url(ocean.jpg);
+    background-image:linear-gradient(to top, #0B132B, #3A506B, #5ba0c0, #6fe2ff, #c3fff6);
+    /*background-image:url(ocean.jpg);*/
     background-size:cover;
     color: white;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
@@ -26,6 +27,7 @@ div{
 h1{
     font-size:100px;
     text-shadow:0px 6px 3px rgb(0, 0, 0, 0.5);
+    margin-bottom:20px;
     animation-name:fade;
     animation-duration:3s;
     animation-fill-mode:forwards;
@@ -41,6 +43,8 @@ p{
     margin-bottom:10px;
     border-radius:6px;
     padding:10px;
+    padding-left:20px;
+    padding-right:20px;
     border-color:rgb(2, 158, 248);
     color:white;
     font-weight:bold;
@@ -57,10 +61,10 @@ p{
     padding-right:100px;
     padding-left:100px;
     border-radius:6px;
-    color:rgb(107, 105, 105);
+    color:rgb(85, 83, 83);
     background-color:white;
-    margin-top:10px;
-    width:300px;
+    margin-top:0px;
+    width:500px;
     animation-name:fade2;
     animation-duration:3s;
     animation-delay:1.5s;
