@@ -26,6 +26,17 @@
 		{
 		  width: 100%; 
 		}
+
+		.normal-text
+		{
+			margin-bottom: 10px;
+		}
+
+		#loginButton
+		{
+			margin-left: 120px;
+		}
+
 		</style>
 
 </head>
@@ -39,28 +50,28 @@
 				<h4 class="card-title" style="text-align:center;">  Register  </h4>
 				<form>
 					<div class="form-group">
-						<label for="FirstName">First Name</label>
+						<label class="normal-text">First Name</label>
 						<input type="text" class="form-control custom-form-control" id="FirstName">
 					</div>
 					<div class="form-group">
-						<label for="LastName">Last Name</label>
+						<label class="normal-text">Last Name</label>
 						<input type="text" class="form-control custom-form-control" id="LastName">
 					</div>
 					<div class="form-group">
-						<label for="login">Login</label>
+						<label class="normal-text">Login</label>
 						<input type="text" class="form-control custom-form-control" id="login">
 					</div>
 					<div class="form-group">
-						<label for="password">Password</label>
+						<label class="normal-text">Password</label>
 						<input type="password" class="form-control custom-form-control" id="password">
 					</div>
 					<div class="form-group">
-						<label for="passwordConfirmation">Confirm Password</label>
+						<label class="normal-text">Confirm Password</label>
 						<input type="password" class="form-control custom-form-control" id="passwordConfirmation"><br>	
 					</div>
 					<div class="row">
 						<div class="col">
-							<button type="button" class="btn btn-primary btn-block" onclick="doRegister();">Register</button><br>
+							<button type="button" class="btn btn-primary btn-block" id = "loginButton" onclick="doRegister();">Register</button><br>
 						</div>
 					</div>
 					<div class="row">

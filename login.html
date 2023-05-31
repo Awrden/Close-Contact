@@ -29,6 +29,16 @@
 	{
 	  width: 100%;
 	}
+
+	#loginButton
+	{
+		margin-left: 70px;
+	}
+
+	.normal-text
+	{
+		margin-bottom: 10px;
+	}
 	</style>
 </head>
 <body>
@@ -40,16 +50,17 @@
 				<h4 class="card-title" style="text-align: center;">  Login  </h4>
 				<form>
 				  <div class="form-group">
-					<label>Login</label>
+					<label class = "normal-text">Login</label>
 					<input type="text" class="form-control custom-form-control" id="loginName" placeholder="Enter username">
 				  </div>
+				  <br>
 				  <div class="form-group">
-					<label>Password</label>
+					<label class = "normal-text">Password</label>
 					<input type="password" class="form-control custom-form-control" id="loginPassword" placeholder="Enter password"><br>	
 				  </div>
 				  <div class="row">
 				    <div class="col">
-				      <button type="button" class="btn btn-primary btn-block" onclick="doLogin();">Login</button>
+				      <button type="button"  id = "loginButton" class="btn btn-primary btn-block" onclick="doLogin();">Login</button>
 				    </div>
 				    <div class="col">
 				      <button type="button" class="btn btn-outline-dark" onclick="window.location.href='register.html'">Register</button>
