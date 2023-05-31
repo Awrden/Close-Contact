@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -39,20 +40,22 @@
 				<h4 class="card-title" style="text-align: center;">  Login  </h4>
 				<form>
 				  <div class="form-group">
-					<label for="username">Login</label>
-					<input type="text" class="form-control custom-form-control" id="login" placeholder="Enter username">
+					<label for="loginName">Login</label>
+					<input type="text" class="form-control custom-form-control" id="loginName" placeholder="Enter username">
 				  </div>
 				  <div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" class="form-control custom-form-control" id="password" placeholder="Enter password"><br>	
+					<label for="loginPassword">Password</label>
+					<input type="password" class="form-control custom-form-control" id="loginPassword" placeholder="Enter password"><br>	
 				  </div>
 				  <div class="row">
 				    <div class="col">
-				      <button type="submit" class="btn btn-primary btn-block" onclick="doLogin()">Login</button>
+				      <button type="submit" class="btn btn-primary btn-block" onclick="doLogin();">Login</button>
 				    </div>
 				    <div class="col">
 				      <button type="button" class="btn btn-outline-dark" onclick="window.location.href='register.html'">Register</button>
 				    </div>
+				  </div>
+					<span id = "loginResult"></span>
 				</form>
 			  </div>
 			</div>
