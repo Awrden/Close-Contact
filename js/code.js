@@ -111,8 +111,10 @@ function doRegister()
 		if (!validPassword(password))
 		{
 			document.getElementById("registerResult").innerHTML = "Invalid Password<br> The Requirements:<br> At Least 8 Characters<br>At Least One Lowercase Letter<br>At Least One Upper Case Letter<br>One number<br>";
+			return;
 		}
-		if (password!==passwordConfirmation) {
+		if (password!==passwordConfirmation)
+		{
 			document.getElementById("registerResult").innerHTML = "Passwords must match";
 		}
 	}
@@ -311,13 +313,10 @@ function validRegisterFields(firstName, lastName, login, password, passwordConfi
 
 function validPassword(password)
 { 
-	if (
-		password.length < 8 ||
+	if (password.length < 8 ||
 		password.search(/[a-z]/) < 0 ||
 		password.search(/[A-Z]/) < 0 ||
-		password.search(/[0-9]/) < 0
-	  ) 
-
+		password.search(/[0-9]/) < 0) 
 	  {
 		return false;
 	  } 
