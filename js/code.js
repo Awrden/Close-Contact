@@ -61,8 +61,9 @@ function doRegister()
 	let lastName = document.getElementById("LastName").value;
 	let login = document.getElementById("login").value;
 	let password = document.getElementById("password").value;
+	let passwordConfirmation = document.getElementById("passwordConfirmation").value;
 
-	if (validRegisterFields(firstName, lastName, login, password))
+	if (validRegisterFields(firstName, lastName, login, password, passwordConfirmation))
 	{
 		document.getElementById("registerResult").innerHTML = "";
 
@@ -110,6 +111,9 @@ function doRegister()
 		if (!validPassword(password))
 		{
 			document.getElementById("registerResult").innerHTML = "Invalid Password<br> The Requirements:<br> At Least 8 Characters<br>At Least One Lowercase Letter<br>At Least One Upper Case Letter<br>One number<br>";
+		}
+		if (password!==passwordConfirmation) {
+			document.getElementById("registerResult").innerHTML = "Passwords must match";
 		}
 	}
 }
@@ -286,7 +290,7 @@ function searchColor()
 	
 }
 
-function validRegisterFields(firstName, lastName, login, password)
+function validRegisterFields(firstName, lastName, login, password, passwordConfirmation)
 {
 	if (firstName.length < 1 || lastName.length < 1)
 	{
@@ -300,6 +304,7 @@ function validRegisterFields(firstName, lastName, login, password)
 	{
 		return false;
 	}
+	if(password !== passwordConfirmation) return false;
 
 	return true;
 }
