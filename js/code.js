@@ -85,7 +85,6 @@ function doRegister()
 					userId = jsonObject.id;
 					firstName = jsonObject.firstName;
 					lastName = jsonObject.lastName;
-					saveCookie();
 					window.location.href = "login.html";
 				}
 			};
@@ -110,7 +109,7 @@ function doRegister()
 		}
 		if (!validPassword(password))
 		{
-			document.getElementById("registerResult").innerHTML = "Invalid Password<br> The Requirements:<br> At Least 8 Characters<br>At Least One Lowercase Letter<br>At Least One Upper Case Letter<br>One number<br>";
+			document.getElementById("registerResult").innerHTML = "Invalid Password<br> The Requirements:<br> At Least 8 Characters<br>At Least One Lowercase Letter<br>At Least One Upper Case Letter<br>One Number<br>";
 			return;
 		}
 		if (password!==passwordConfirmation)
@@ -233,7 +232,6 @@ function addContact()
 	{
 		document.getElementById("colorAddResult").innerHTML = err.message;
 	}
-	s
 }
 
 function updateContact()
@@ -247,17 +245,17 @@ function deleteContact()
 }
 
 
-function searchColor()
+function searchContact()
 {
 	let srch = document.getElementById("search").value;
-	document.getElementById("colorSearchResult").innerHTML = "";
+	document.getElementById("contactSearchResults").innerHTML = "";
 	
 	let contactList = "";
 
 	let tmp = {search:srch,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/SearchColors.' + extension;
+	let url = urlBase + '/SearchContact.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -268,19 +266,23 @@ function searchColor()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("colorSearchResult").innerHTML = "Contact(s) has been retrieved";
+				document.getElementById("contactSearchResults").innerHTML = "Contact(s) has been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 				
-				for (let i=0; i < 10; i++)
+				for (let i = 0; i <= 10; i++)
 				{
-					contactList += jsonObject.results[i];
-					if (i < jsonObject.results.length - 1)
-					{
-						contactList += "<br />\r\n";
-					}
+            		/*jsonObject.results[i]["FirstName"];
+					jsonObject.result[i]["LastName"]
+					jsonObject.results[i]["LastName"];
+            		jsonObject.results[i]["Phone"];
+            		jsonObject.results[i]["Email"];
+					jsonObject.results[i]["ID"];*/
+
+					/*contactList += jsonObject.results[i]
+					contactList += "<br />\r\n";*/
 				}
 				
-				document.getElementsByTagName("p")[0].innerHTML = colorList;
+				document.getElementsByTagName("p")[0].innerHTML = contactList;
 			}
 		};
 		xhr.send(jsonPayload);
