@@ -63,59 +63,55 @@ function doRegister()
 	let password = document.getElementById("password").value;
 	let passwordConfirmation = document.getElementById("passwordConfirmation").value;
 
-	if (validRegisterFields(firstName, lastName, login, password, passwordConfirmation))
+	if (firstName.length < 1 || lastName.length < 1)
 	{
-		document.getElementById("registerResult").innerHTML = "";
-
-		let tmp = {FirstName:firstName, LastName:lastName, login:login, password:password};
-		let jsonPayload = JSON.stringify( tmp );
-		
-		let url = urlBase + '/Register.' + extension;
-
-		let xhr = new XMLHttpRequest();
-		xhr.open("POST", url, true);
-		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-		try
-		{
-			xhr.onreadystatechange = function() 
-			{
-				if (this.readyState == 4 && this.status == 200) 
-				{	
-					let jsonObject = JSON.parse(xhr.responseText);
-					userId = jsonObject.id;
-					firstName = jsonObject.firstName;
-					lastName = jsonObject.lastName;
-					window.location.href = "login.html";
-				}
-			};
-			xhr.send(jsonPayload);
-		}
-		catch(err)
-		{
-			document.getElementById("registerResult").innerHTML = err.message;
-		}
+		document.getElementById("registerResult").innerHTML = "First/Last name cannot be left blank";
+		return;
 	}
-	else
+	if (login.length < 1)
 	{
-		if (firstName.length < 1 || lastName.length < 1)
+		document.getElementById("registerResult").innerHTML = "Login cannot be left blank";
+		return;
+	}
+	if (!validPassword(password))
+	{
+		document.getElementById("registerResult").innerHTML = "Invalid Password<br> The Requirements:<br> At Least 8 Characters<br>At Least One Lowercase Letter<br>At Least One Upper Case Letter<br>One Number<br>";
+		return;
+	}
+	if (password!==passwordConfirmation) 
+	{
+		document.getElementById("registerResult").innerHTML = "Passwords must match";
+		return;
+	}
+
+	document.getElementById("registerResult").innerHTML = "";
+
+	let tmp = {FirstName:firstName, LastName:lastName, login:login, password:password};
+	let jsonPayload = JSON.stringify( tmp );
+	
+	let url = urlBase + '/Register.' + extension;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function() 
 		{
-			document.getElementById("registerResult").innerHTML = "First/Last name cannot be left blank";
-			return;
-		}
-		if (login.length < 1)
-		{
-			document.getElementById("registerResult").innerHTML = "Login cannot be left blank";
-			return;
-		}
-		if (!validPassword(password))
-		{
-			document.getElementById("registerResult").innerHTML = "Invalid Password<br> The Requirements:<br> At Least 8 Characters<br>At Least One Lowercase Letter<br>At Least One Upper Case Letter<br>One Number<br>";
-			return;
-		}
-		if (password!==passwordConfirmation)
-		{
-			document.getElementById("registerResult").innerHTML = "Passwords must match";
-		}
+			if (this.readyState == 4 && this.status == 200) 
+			{	
+				let jsonObject = JSON.parse(xhr.responseText);
+				userId = jsonObject.id;
+				firstName = jsonObject.firstName;
+				lastName = jsonObject.lastName;
+				window.location.href = "login.html";
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("registerResult").innerHTML = err.message;
 	}
 }
 
@@ -291,25 +287,6 @@ function searchContact()
 		document.getElementById("colorSearchResult").innerHTML = err.message;
 	}
 	
-}
-
-function validRegisterFields(firstName, lastName, login, password, passwordConfirmation)
-{
-	if (firstName.length < 1 || lastName.length < 1)
-	{
-		return false;
-	}
-	if (login.length < 1)
-	{
-		return false;
-	}
-	if (!validPassword(password))
-	{
-		return false;
-	}
-	if(password !== passwordConfirmation) return false;
-
-	return true;
 }
 
 function validPassword(password)
