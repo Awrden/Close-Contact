@@ -203,6 +203,27 @@ function addContact()
 	let email = document.getElementById("Email").value;
 	let phone = document.getElementById("Phone").value;
 
+	if (FirstName.length < 1 || LastName.length < 1)
+	{
+		document.getElementById("contactAddResult").innerHTML = "First/Last name cannot be left blank";
+		return;
+	}
+	if (email.length < 1)
+	{
+		document.getElementById("contactAddResult").innerHTML = "email cannot be left blank";
+		return;
+	}
+	if (!validEmail(email))
+	{
+		document.getElementById("contactAddResult").innerHTML = "Invalid email address";
+		return;
+	}
+	if (!validPhone(phone)) 
+	{
+		document.getElementById("contactAddResult").innerHTML = "Invalid phone number";
+		return;
+	}
+
 	document.getElementById("contactAddResult").innerHTML = "";
 
 	let tmp = {FirstName:FirstName, LastName:LastName, email:email, phone:phone, userId:userId};
