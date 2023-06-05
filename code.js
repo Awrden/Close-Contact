@@ -251,14 +251,84 @@ function addContact()
 	}
 }
 
-function updateContact()
+function updateContact(id)
 {
+	
+	let contactFirstName = document.getElementById("contactFirst").value;
+	let contactLastName = document.getElementById("contactLast").value;
+
+	let email = document.getElementById("contactEmail").value;
+	let phone = document.getElementById("contactPhone").value;
+	let ID = id;
+	document.getElementById("contactUpdateResult").innerHTML = "";
+
+	let tmp = {FirstName:contactFirstName,LastName:contactLastName,Email:email,Phone:phone,ID:ID};
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + '/UpdateContact.' + extension;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 200) 
+			{
+				try {
+					JSON.parse(xhr.responseText);
+				} catch (e) {
+					document.getElementById("contactUpdateResult").innerHTML = xhr.responseText;
+					return;
+				}
+		
+				document.getElementById("contactUpdateResult").innerHTML = "Contact has been updated";
+
+				setTimeout(function(){searchContact();}, 1000);
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("contactUpdateResult").innerHTML = err.message;
+	}
 
 }
 
-function deleteContact()
+function deleteContact(str)
 {
+	// (contact) = passed jsonObject.results[i]
+	// let id = contact["ID"];
+	let id = str["ID"];
+	let tmp = {ID:id};
+	let jsonPayload = JSON.stringify( tmp );
 
+	let url = urlBase + '/DeleteContact.' + extension;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 200) 
+			{
+				// remove entire row/contact from list
+				// refresh page
+
+				document.getElementById("contactDeleteResult").innerHTML = "Contact has been deleted";
+
+				setTimeout(function(){searchContact();}, 1000);
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document
 }
 
 
