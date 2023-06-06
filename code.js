@@ -165,37 +165,6 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
-function addColor()
-{
-	let newColor = document.getElementById("colorText").value;
-	document.getElementById("colorAddResult").innerHTML = "";
-
-	let tmp = {color:newColor,userId:userId};
-	let jsonPayload = JSON.stringify( tmp );
-
-	let url = urlBase + '/AddColor.' + extension;
-	
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function() 
-		{
-			if (this.readyState == 4 && this.status == 200) 
-			{
-				document.getElementById("colorAddResult").innerHTML = "Color has been added";
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
-	}
-	
-}
-
 function addContact()
 {
 	let FirstName = document.getElementById("FirstName").value;
@@ -210,7 +179,7 @@ function addContact()
 	}
 	if (email.length < 1)
 	{
-		document.getElementById("contactAddResult").innerHTML = "email cannot be left blank";
+		document.getElementById("contactAddResult").innerHTML = "Email cannot be left blank";
 		return;
 	}
 	if (!validEmail(email))
@@ -251,19 +220,38 @@ function addContact()
 	}
 }
 
-function updateContact(id)
+function updateContact()
 {
-	
+	let id = window.localStorage.getItem("ContactID");
 	let contactFirstName = document.getElementById("contactFirst").value;
 	let contactLastName = document.getElementById("contactLast").value;
-
 	let email = document.getElementById("contactEmail").value;
 	let phone = document.getElementById("contactPhone").value;
-	let ID = id;
 	document.getElementById("contactUpdateResult").innerHTML = "";
 
-	let tmp = {FirstName:contactFirstName,LastName:contactLastName,Email:email,Phone:phone,ID:ID};
-	let jsonPayload = JSON.stringify( tmp );
+	if (contactFirstName.length < 1 || contactLastName.length < 1)
+	{
+		document.getElementById("contactUpdateResult").innerHTML = "First/Last name cannot be left blank";
+		return;
+	}
+	if (email.length < 1)
+	{
+		document.getElementById("contactUpdateResult").innerHTML = "Email cannot be left blank";
+		return;
+	}
+	if (!validEmail(email))
+	{
+		document.getElementById("contactUpdateResult").innerHTML = "Invalid email address";
+		return;
+	}
+	if (!validPhone(phone)) 
+	{
+		document.getElementById("contactUpdateResult").innerHTML = "Invalid phone number";
+		return;
+	}
+
+	let tmp = {FirstName:contactFirstName,LastName:contactLastName,email:email,phone:phone,id:id};
+	let jsonPayload = JSON.stringify(tmp);
 
 	let url = urlBase + '/UpdateContact.' + extension;
 	
@@ -276,16 +264,9 @@ function updateContact(id)
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				try {
-					JSON.parse(xhr.responseText);
-				} catch (e) {
-					document.getElementById("contactUpdateResult").innerHTML = xhr.responseText;
-					return;
-				}
-		
 				document.getElementById("contactUpdateResult").innerHTML = "Contact has been updated";
-
-				setTimeout(function(){searchContact();}, 1000);
+				setTimeout(function(){updateContact();}, 1000);
+				window.location.href = "contacts.html"
 			}
 		};
 		xhr.send(jsonPayload);
@@ -294,16 +275,12 @@ function updateContact(id)
 	{
 		document.getElementById("contactUpdateResult").innerHTML = err.message;
 	}
-
 }
 
-function deleteContact(str)
+function deleteContact(id)
 {
-	// (contact) = passed jsonObject.results[i]
-	// let id = contact["ID"];
-	let id = str["ID"];
-	let tmp = {ID:id};
-	let jsonPayload = JSON.stringify( tmp );
+	let tmp = {id:id};
+	let jsonPayload = JSON.stringify(tmp);
 
 	let url = urlBase + '/DeleteContact.' + extension;
 	
@@ -316,28 +293,24 @@ function deleteContact(str)
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				// remove entire row/contact from list
-				// refresh page
-
-				document.getElementById("contactDeleteResult").innerHTML = "Contact has been deleted";
-
-				setTimeout(function(){searchContact();}, 1000);
+				console.log("Nice");
 			}
 		};
 		xhr.send(jsonPayload);
 	}
 	catch(err)
 	{
-		document
+		document.getElementById("contactDeleteResult").innerHTML = err.message;
+	}
 }
 
 
 function searchContact()
 {
 	let srch = document.getElementById("search").value;
-	document.getElementById("contactSearchResults").innerHTML = "";
-	
-	let contactList = "";
+
+	// Clearing possible previous search results
+	document.getElementById("contactList").innerHTML = "";
 
 	let tmp = {search:srch,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
@@ -353,22 +326,15 @@ function searchContact()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("contactSearchResults").innerHTML = "Contact(s) has been retrieved";
-				let jsonObject = JSON.parse( xhr.responseText );
-				
-				for (let i = 0; i <= 10; i++)
+				let jsonObject = JSON.parse( xhr.responseText );				
+				for (let i = 0; i < 8 && i < jsonObject.results.length; i++)
 				{
-            		/*jsonObject.results[i]["FirstNme"];
-					jsonObject.results[i]["LastName"];
-            		jsonObject.results[i]["Phone"];
-            		jsonObject.results[i]["Email"];
-					jsonObject.results[i][ID];*/
-
-					/*contactList += jsonObject.results[i]
-					contactList += "<br />\r\n";*/
+            		displayContact(jsonObject.results[i]["FirstName"],
+					jsonObject.results[i]["LastName"],
+            		jsonObject.results[i]["Phone"],
+            		jsonObject.results[i]["Email"],
+					jsonObject.results[i]["ID"])
 				}
-				
-				document.getElementsByTagName("p")[0].innerHTML = contactList;
 			}
 		};
 		xhr.send(jsonPayload);
@@ -379,6 +345,75 @@ function searchContact()
 	}
 	
 }
+
+function displayContact(FirstName, LastName, Phone, Email, ID)
+{
+	var cardDiv = document.createElement('div');
+	var cardBody = document.createElement('div');
+	var cardHead = document.createElement('h5');
+	var cardList = document.createElement('ul');
+	var cardFirstName = document.createElement('li');
+	var cardLastName = document.createElement('li');
+	var cardPhone = document.createElement('li');
+	var cardEmail = document.createElement('li');
+	var cardButtonDiv = document.createElement('div');
+	var cardDeleteButton = document.createElement('button');
+	var cardEditButton = document.createElement('a');
+  
+	//Card Div and Contact Information Heading
+	cardDiv.setAttribute('class', 'card m-4');
+  
+	cardDiv.setAttribute('style', 'width: 18rem');
+  
+	cardBody.setAttribute('class', 'card-body');
+	cardHead.setAttribute('class', 'card-title');
+	cardHead.textContent = "Contact Information";
+  
+	// Card Content
+	cardList.setAttribute('class', 'list-group list-group-flush');
+	cardFirstName.setAttribute('class', 'list-group-item');
+	cardLastName.setAttribute('class', 'list-group-item');
+	cardPhone.setAttribute('class', 'list-group-item');
+	cardEmail.setAttribute('class', 'list-group-item');
+	cardFirstName.textContent = FirstName;
+	cardLastName.textContent = LastName;
+	cardPhone.textContent = Phone;
+	cardEmail.textContent = Email;
+  
+	// Delete Button Setup
+	cardButtonDiv.setAttribute('class','card-body text-center d-flex justify-content-around');
+	cardDeleteButton.setAttribute('class','btn btn-primary justify-content-center d-flex');
+	cardDeleteButton.addEventListener('click', function() {
+		cardDiv.remove();
+		deleteContact(ID);
+	  });
+	cardDeleteButton.textContent = 'Delete';  
+
+	// Edit Button Setup
+	cardEditButton.setAttribute('class', 'btn btn-primary');  
+	cardEditButton.textContent = 'Update';
+  	cardEditButton.setAttribute('class', 'btn btn-primary justify-content-center d-flex');
+	cardEditButton.setAttribute('type', 'button');  
+	var updateContactId = `saveContactId(${ID}); window.location.href="editcontact.html"`;  
+	cardEditButton.setAttribute('onclick', updateContactId);
+  
+	// Getting Contact List div in contacts.html
+	let section = document.getElementById('contactList');
+  
+	// Setting up the card
+	section.appendChild(cardDiv);
+	cardDiv.appendChild(cardBody);
+	cardBody.appendChild(cardHead);
+	cardDiv.appendChild(cardList);
+	cardList.appendChild(cardFirstName);
+	cardList.appendChild(cardLastName);
+	cardList.appendChild(cardPhone);
+	cardList.appendChild(cardEmail);
+	cardDiv.appendChild(cardButtonDiv);	
+	cardButtonDiv.appendChild(cardDeleteButton);
+	cardButtonDiv.appendChild(cardEditButton);
+}
+
 
 function validPassword(password)
 { 
@@ -411,4 +446,9 @@ function validPhone(phone)
 	const ret = String(phone).toLowerCase().match(/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/);
 
   	return Boolean(ret);
+}
+
+function saveContactId(id)
+{
+	window.localStorage.setItem('ContactID',id);
 }
