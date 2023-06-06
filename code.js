@@ -195,7 +195,7 @@ function addContact()
 
 	document.getElementById("contactAddResult").innerHTML = "";
 
-	let tmp = {FirstName:FirstName, LastName:LastName, email:email, phone:phone, userId:userId};
+	let tmp = {FirstName:FirstName, LastName:LastName, email:email, phone:formatNumber(phone), userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + '/AddContact.' + extension;
@@ -279,29 +279,32 @@ function updateContact()
 
 function deleteContact(id)
 {
-	let tmp = {id:id};
-	let jsonPayload = JSON.stringify(tmp);
+	if (confirm("Are you sure?"))
+	{
+		let tmp = {id:id};
+		let jsonPayload = JSON.stringify(tmp);
 
-	let url = urlBase + '/DeleteContact.' + extension;
-	
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function() 
+		let url = urlBase + '/DeleteContact.' + extension;
+		
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		try
 		{
-			if (this.readyState == 4 && this.status == 200) 
+			xhr.onreadystatechange = function() 
 			{
-				console.log("Nice");
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("contactDeleteResult").innerHTML = err.message;
-	}
+				if (this.readyState == 4 && this.status == 200) 
+				{
+					console.log("Nice");
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			document.getElementById("contactDeleteResult").innerHTML = err.message;
+		}
+	}	
 }
 
 
@@ -407,8 +410,8 @@ function displayContact(FirstName, LastName, Phone, Email, ID)
 	cardDiv.appendChild(cardList);
 	cardList.appendChild(cardFirstName);
 	cardList.appendChild(cardLastName);
-	cardList.appendChild(cardPhone);
 	cardList.appendChild(cardEmail);
+	cardList.appendChild(cardPhone);
 	cardDiv.appendChild(cardButtonDiv);	
 	cardButtonDiv.appendChild(cardDeleteButton);
 	cardButtonDiv.appendChild(cardEditButton);
@@ -443,7 +446,7 @@ function validEmail(email)
 
 function validPhone(phone)
 {
-	const ret = String(phone).toLowerCase().match(/^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/);
+	const ret = String(phone).toLowerCase().match(/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/);
 
   	return Boolean(ret);
 }
@@ -451,4 +454,16 @@ function validPhone(phone)
 function saveContactId(id)
 {
 	window.localStorage.setItem('ContactID',id);
+}
+
+function formatNumber(phone)
+{
+	var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+	var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+	if (match) 
+	{
+    	var intlCode = (match[1] ? '+1 ' : '');
+    	return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+  	}
+	return null;
 }
