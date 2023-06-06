@@ -250,7 +250,7 @@ function updateContact()
 		return;
 	}
 
-	let tmp = {FirstName:contactFirstName,LastName:contactLastName,email:email,phone:phone,id:id};
+	let tmp = {FirstName:contactFirstName,LastName:contactLastName,email:email,phone:formatNumber(phone),id:id};
 	let jsonPayload = JSON.stringify(tmp);
 
 	let url = urlBase + '/UpdateContact.' + extension;
@@ -458,7 +458,7 @@ function saveContactId(id)
 
 function formatNumber(phone)
 {
-	var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+	var cleaned = ('' + phone).replace(/\D/g, '');
 	var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
 	if (match) 
 	{
