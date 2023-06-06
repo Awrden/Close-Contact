@@ -21,7 +21,7 @@
             color: black;
         }
 
-        [class *= "col-9"]
+        [class *= "col-9 text-center"]
         {
             padding-left: 10px;
             background-image:linear-gradient(to top, #0B132B, #3A506B, #5ba0c0, #6fe2ff, #c3fff6);
@@ -43,6 +43,11 @@
         #logout
         {
             margin: 21%;
+        }
+        .container
+        {
+            display: flex;
+            flex-wrap: wrap;
         }
     </style>
 </head>
@@ -86,12 +91,17 @@
                     <button type="button" id="logout" class = "btn btn-outline-dark" onclick="doLogout();"> Log Out </button>
                 </div>
             </div>
-            <div class="col-9">
-                <h1>Contacts</h1>
-                <span id="contactSearchResults"></span>
-                <p id="contactList"></p>
+            <div class="col-9 text-center">
+                <div class="container-fluid">
+                    <div class="row d-flex justify-content-around">
+                        <h1>Contacts</h1>
+                            <div class="row d-flex justify-content-around">
+                                <div id="contactList" class="container">
+
+                                </div>
+                            </div>
+                </div>
             </div>
-        </div>
     </div>
 
     <script src="js/bootstrap.bundle.js"></script>
