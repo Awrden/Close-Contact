@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewpoint" content="width=device-width, intial-scale=1.0">
+    <title>Close Contact</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script type="text/javascript" src="js/code.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() 
+        {
+            readCookie();
+        }, false);
+        </script>
+    <style>
+        [class *= "col-3"]
+        {
+            background-color: white;
+            border: 1px black;
+            color: black;
+        }
+
+        [class *= "col-9"]
+        {
+            padding-left: 10px;
+            background-image:linear-gradient(to top, #0B132B, #3A506B, #5ba0c0, #6fe2ff, #c3fff6);
+            color: black;
+        }
+        h1
+        {
+            text-align: center;
+        }
+        h2
+        {
+            text-align: center;
+            margin-top: 50px;
+        }
+        #searchContactButton
+        {
+            margin-top: 5%;
+        }
+        #logout
+        {
+            margin: 21%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-3">
+                <h1>Welcome!</h1>
+                <h2>Contact Menu</h2>
+                <form>
+                    <div class="mb-3">
+                      <label for="contactFirstName" class="form-label">First Name</label>
+                      <input type="text" class="form-control border border-black" id="FirstName" aria-describedby="contactFirstName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control border border-black" id="LastName" aria-describedby="contactLastName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactEmail" class="form-label">Email</label>
+                        <input type="text" class="form-control border border-black" id="Email" aria-describedby="contactEmail" placeholder="example@email.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactPhone" class="form-label">Phone</label>
+                        <input type="text" class="form-control border border-black" id="Phone" aria-describedby="contactPhone" placeholder="XXX-XXX-XXXX">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="addContact();">Add Contact</button>
+                </form>
+                <span id="contactAddResult"></span>
+
+                <h2>Search Menu</h2>
+                <div>
+                    <div class="mb-3">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control border border-black" id="search" aria-describedby="search">
+                    </div>
+                <button type="button" class="btn btn-primary" onclick="searchContact();"> Search </button>
+                </div>
+
+                <div class ="d-grid gap-2">
+                    <button type="button" id="logout" class = "btn btn-outline-dark" onclick="doLogout();"> Log Out </button>
+                </div>
+            </div>
+            <div class="col-9">
+                <h1>Contacts</h1>
+                <span id="contactSearchResults"></span>
+                <p id="contactList"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.js"></script>
+</body>
+
+</html>
